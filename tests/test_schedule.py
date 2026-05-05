@@ -54,6 +54,13 @@ def test_is_not_overdue_when_ran_on_time():
     assert sched.is_overdue(last_run, grace_seconds=60.0) is False
 
 
+def test_is_overdue_within_grace_period():
+    sched = CronSchedule("* * * * *", "minutely")
+    # last_run was just over a minute ago but within the grace window
+    last_run = REFERENCE - timedelta(seconds=70)
+    assert sched.is_overdue(last_run, grace_seconds=90.0) is False
+
+
 def test_repr():
     sched = CronSchedule("0 * * * *", "hourly_job")
     assert "hourly_job" in repr(sched)
