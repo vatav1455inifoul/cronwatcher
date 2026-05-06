@@ -46,6 +46,12 @@ def test_average_delay(collector):
     assert collector.get("backup").average_delay == 45.0
 
 
+def test_average_delay_no_delays_returns_zero(collector):
+    """average_delay should be 0.0 when no delayed runs have been recorded."""
+    collector.record_run("backup", delay_seconds=0.0, run_time=_now())
+    assert collector.get("backup").average_delay == 0.0
+
+
 def test_max_delay(collector):
     collector.record_run("backup", delay_seconds=10.0, run_time=_now())
     collector.record_run("backup", delay_seconds=90.0, run_time=_now())
