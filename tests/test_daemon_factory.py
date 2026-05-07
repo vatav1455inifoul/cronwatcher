@@ -47,3 +47,15 @@ def test_build_daemon_watcher_is_set():
     with patch("cronwatcher.daemon_factory.load_watcher", return_value=fake_watcher):
         daemon = build_daemon("cfg.yaml")
     assert daemon.watcher is fake_watcher
+
+
+def test_build_daemon_invalid_interval_raises():
+    """build_daemon should raise ValueError when interval is not positive."""
+    fake_watcher = _fake_watcher()
+    with patch("cronwatcher.daemon_factory.load_watcher", return_value=fake_watcher):
+        with pytest.raises(ValueError, match="interval"):
+            build_daemon("cfg.yaml", interval=0)
+
+    with patch("cronwatcher.daemon_factory.load_watcher", return_value=fake_watcher):
+        with pytest.raises(ValueError, match="interval"):
+            build_daemon("cfg.yaml", interval=-5)
