@@ -76,3 +76,15 @@ def test_window_property():
     w = timedelta(minutes=30)
     dc = DigestCollector(window=w)
     assert dc.window == w
+
+
+def test_collect_multiple_jobs_all_appear_in_flush():
+    """Each distinct job name should appear in the flush output."""
+    dc = DigestCollector()
+    dc.collect(_alert(name="job_alpha"))
+    dc.collect(_alert(name="job_beta"))
+    dc.collect(_alert(name="job_gamma"))
+    result = dc.flush()
+    assert "job_alpha" in result
+    assert "job_beta" in result
+    assert "job_gamma" in result
