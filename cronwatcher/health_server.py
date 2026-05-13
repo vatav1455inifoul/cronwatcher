@@ -53,5 +53,10 @@ class HealthServer:
             self._server = None
 
     @property
+    def is_running(self) -> bool:
+        """Return True if the server thread is alive."""
+        return self._thread is not None and self._thread.is_alive()
+
+    @property
     def address(self) -> str:
         return f"http://{self._host}:{self._port}/health"
