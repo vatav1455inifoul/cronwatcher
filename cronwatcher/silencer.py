@@ -57,6 +57,10 @@ class Silencer:
     def active_windows(self, at: Optional[datetime] = None) -> List[SilenceWindow]:
         return [w for w in self._windows if w.is_active(at)]
 
+    def windows_for_job(self, job_name: str, at: Optional[datetime] = None) -> List[SilenceWindow]:
+        """Return all active windows that cover the given job, including wildcard windows."""
+        return [w for w in self._windows if w.covers(job_name, at)]
+
     def purge_expired(self, at: Optional[datetime] = None) -> int:
         """Remove windows that have already ended; returns number removed."""
         now = at or _utcnow()
