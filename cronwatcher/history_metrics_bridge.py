@@ -48,3 +48,15 @@ class HistoryMetricsBridge:
         for job_name in self._history.all_jobs():
             results[job_name] = self.sync(job_name)
         return results
+
+    def total_synced(self, results: dict[str, int]) -> int:
+        """Return the total number of records replayed across all jobs.
+
+        Convenience helper to sum the values returned by :meth:`sync_all`.
+
+        Example::
+
+            results = bridge.sync_all()
+            print(f"Replayed {bridge.total_synced(results)} records total")
+        """
+        return sum(results.values())
