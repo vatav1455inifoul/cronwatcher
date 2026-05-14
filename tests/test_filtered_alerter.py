@@ -75,3 +75,15 @@ def test_alert_missed_suppressed_by_filter():
     assert result is False
     assert len(alerter.history) == 0
     assert fa.suppressed_count == 1
+
+
+def test_alert_delayed_suppressed_by_filter():
+    """A WARNING-level delayed alert should be suppressed when the filter matches it."""
+    alerter = Alerter()
+    af = AlertFilter()
+    af.add_rule(FilterRule(job_pattern="sync", level=AlertLevel.WARNING))
+    fa = FilteredAlerter(alerter=alerter, alert_filter=af)
+    result = fa.alert_delayed("sync", 30)
+    assert result is False
+    assert len(alerter.history) == 0
+    assert fa.suppressed_count == 1
